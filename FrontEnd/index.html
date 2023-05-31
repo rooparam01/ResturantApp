@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Swiggy Application</title>
+  </head>
+  <body>
+    <label for="customerId">CustomerId</label>
+    <input type="text" id="customerId" /> <br /><br />
+    <label for="restaurantId">restaurantId</label>
+    <input type="text" id="restaurantId" /><br /><br />
+    <label for="menuItemId">menuItemId</label>
+    <input type="text" id="menuItemId" /><br /><br />
+    <button id="orderplace">Order</button>
+  </body>
+  <script>
+    let customerEl = document.getElementById("customerId");
+    let restaurantEl = document.getElementById("customerId");
+    let menuItemEl = document.getElementById("menuItemId");
+    let orderEl = document.getElementById("orderplace");
+
+    orderEl.addEventListener("click", () => {
+      let customerId = customerEl.value;
+      let restaurantId = restaurantEl.value;
+      let menuItemId = menuItemEl.value;
+      let menuItemIds = [];
+      menuItemIds.push(menuItemId);
+
+      let data = {};
+
+      fetch(
+        `http://localhost:8080/orders/${customerId}/${restaurantId}?menuItemIds=${menuItemIds.join(
+          ","
+        )}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        }
+      )
+        .then((response) => response.json())
+        .then((result) => {
+          const order = result; // Access the order object from the response
+          // Use the order object as needed
+          alert("Order Places Successful Order Id:" + order.orderId);
+          console.log(order);
+          // ...
+        })
+        .catch((error) => console.log("error", error));
+    });
+  </script>
+</html>
