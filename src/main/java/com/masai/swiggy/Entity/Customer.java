@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 @Entity
 @Data
@@ -30,5 +31,8 @@ public class Customer {
 
     private Address address;
 @OneToMany(mappedBy = "customer")
-    private List<Order> orderList;
+    private List<Order> orderList = new ArrayList<>();
+
+@OneToMany(mappedBy = "customer",fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+    private List<Authority> authorities = new ArrayList<>();
 }

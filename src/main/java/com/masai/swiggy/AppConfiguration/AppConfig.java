@@ -18,12 +18,16 @@ public class AppConfig {
 
         http.authorizeHttpRequests(auth ->{
 
-                    auth.requestMatchers(HttpMethod.POST, "/customers").permitAll()
+                    auth.requestMatchers(HttpMethod.POST, "/customers","/swagger-ui*/**","/v3/api-docs/**").permitAll()
+                            .requestMatchers(HttpMethod.PUT,"/orders").hasAnyAuthority("USER")
                             .anyRequest().authenticated();
+
+
                 })
                 .csrf(csrf -> csrf.disable())
                 .formLogin(Customizer.withDefaults())
                 .httpBasic(Customizer.withDefaults());
+
 
 
         return http.build();
