@@ -1,6 +1,7 @@
 package com.masai.swiggy.AppConfiguration;
 
 import com.masai.swiggy.DAO.CustomerRepository;
+import com.masai.swiggy.Entity.Authority;
 import com.masai.swiggy.Entity.Customer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -9,6 +10,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -47,6 +49,10 @@ public class MyAuthenticationProvider implements AuthenticationProvider {
 
                 List<GrantedAuthority> authorities = new ArrayList<>();
                 //authorities.add(new SimpleGrantedAuthority(customer.getRole()));
+                List<Authority> authorityList = customer.getAuthorities();
+                for(Authority auth:authorityList){
+                    authorities.add(new SimpleGrantedAuthority(auth.getName()));
+                }
 
                 return new UsernamePasswordAuthenticationToken(username, pwd, authorities);
 
