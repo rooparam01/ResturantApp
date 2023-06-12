@@ -33,6 +33,7 @@ public class AppConfig {
                     cfg.setAllowCredentials(true);
                     cfg.setAllowedHeaders(Collections.singletonList("*"));
                     cfg.setExposedHeaders(Arrays.asList("Authorization"));
+
                     return cfg;
                 }
             });

@@ -35,6 +35,8 @@ public class CustomerController {
         return new ResponseEntity<>(customer.getName()+"Logged In Successfully", HttpStatus.ACCEPTED);
     }
 
+
+
     @GetMapping("/customers/{email}")
     public ResponseEntity<Customer> getDetailsByEmail(@PathVariable String email){
         Customer customer = customerService.getUserDetailsByEmail(email);
