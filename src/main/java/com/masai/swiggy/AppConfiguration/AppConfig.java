@@ -42,13 +42,14 @@ public class AppConfig {
 
         http.authorizeHttpRequests(auth -> {
                     auth.requestMatchers(HttpMethod.POST, "/customers").permitAll()
-                            .requestMatchers(HttpMethod.GET, "/hello").hasAnyAuthority("VIEWALLCUSTOMER")
+                            .requestMatchers(HttpMethod.GET, "/hello").hasAnyAuthority("VIEWALLCUSTOMER","VIEWCUSTOMER")
                             .anyRequest().authenticated();
                 })
                 .csrf(csrf -> csrf.disable())
                 .formLogin(Customizer.withDefaults())
                 .httpBasic(Customizer.withDefaults())
-                .addFilterAfter(new JwtTokenGeneratorFilter(), BasicAuthenticationFilter.class);
+                .addFilterAfter(new JwtTokenGeneratorFilter(), BasicAuthenticationFilter.class)
+        .addFilterBefore(new JwtTokenValidatorFilter(), BasicAuthenticationFilter.class);
 
         return http.build();
     }
