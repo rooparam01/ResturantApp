@@ -46,7 +46,9 @@ public class JwtTokenGeneratorFilter extends OncePerRequestFilter {
                     .setExpiration(new Date(new Date().getTime()+ 30000000)) // expiration time of 8 hours
                     .signWith(key).compact();
 
+
             response.setHeader(SecurityConstants.JWT_HEADER, jwt);
+
 
         }
 
@@ -68,8 +70,8 @@ public class JwtTokenGeneratorFilter extends OncePerRequestFilter {
     //this make sure that this filter will execute only for first time when client call the api /signIn at first time
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
-
-        return !request.getServletPath().equals("/signIn");
+        String serveletPath = request.getServletPath();
+        return !(serveletPath.equals("/customers/signIn") || serveletPath.equals("/restaurants/signIn") || serveletPath.equals("/deliverypartners/signIn"));
     }
 
 

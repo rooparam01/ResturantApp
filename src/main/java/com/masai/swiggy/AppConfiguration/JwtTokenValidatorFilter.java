@@ -63,8 +63,8 @@ public class JwtTokenValidatorFilter extends OncePerRequestFilter {
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
-
-        return request.getServletPath().equals("/signIn");
+String serveletPath = request.getServletPath();
+        return serveletPath.equals("/customers/signIn") || serveletPath.equals("/restaurants/signIn") || serveletPath.equals("/deliverypartners/signIn");
     }
 
 }

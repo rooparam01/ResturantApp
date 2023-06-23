@@ -28,6 +28,9 @@ public class MenuItem {
     @ManyToMany
     private List<Order> orderList = new ArrayList<>();
 
+    @ManyToOne
+    private Restaurant restaurant;
+
 
 
 }

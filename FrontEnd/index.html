@@ -1,56 +1,132 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
   <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Swiggy Application</title>
+    <title>Food Delivery App</title>
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f2f2f2;
+        margin: 0;
+        padding: 0;
+      }
+
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 40px;
+        text-align: center;
+      }
+
+      h1 {
+        color: #d24a5b;
+        font-size: 40px;
+        margin-top: 0;
+        margin-bottom: 40px;
+      }
+
+      p {
+        color: #666666;
+        font-size: 18px;
+        line-height: 1.5;
+        margin-bottom: 40px;
+      }
+
+      .btn {
+        padding: 16px 32px;
+        font-size: 18px;
+        text-decoration: none;
+        border-radius: 4px;
+        transition: background-color 0.3s ease;
+        display: block;
+        width: 100%;
+        margin-bottom: 20px;
+      }
+
+      .btn-primary {
+        background-color: #d24a5b;
+        color: #ffffff;
+      }
+
+      .btn-primary:hover {
+        background-color: #b33f50;
+      }
+
+      .btn-secondary {
+        background-color: #3a3a3a;
+        color: #ffffff;
+      }
+
+      .btn-secondary:hover {
+        background-color: #292929;
+      }
+
+      .btn-success {
+        background-color: #28a745;
+        color: #ffffff;
+      }
+
+      .btn-success:hover {
+        background-color: #1a682c;
+      }
+
+      .btn-container {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+
+      .btn-col {
+        flex: 0 0 200px;
+        margin-right: 20px;
+      }
+
+      @media (max-width: 576px) {
+        .btn-col {
+          margin-right: 0;
+          margin-bottom: 20px;
+        }
+      }
+    </style>
   </head>
   <body>
-    <label for="customerId">CustomerId</label>
-    <input type="text" id="customerId" /> <br /><br />
-    <label for="restaurantId">restaurantId</label>
-    <input type="text" id="restaurantId" /><br /><br />
-    <label for="menuItemId">menuItemId</label>
-    <input type="text" id="menuItemId" /><br /><br />
-    <button id="orderplace">Order</button>
+    <div class="container">
+      <h1>Welcome to the Food Delivery App</h1>
+      <p>
+        Order delicious food from your favorite restaurants and get it delivered
+        right to your doorstep.
+      </p>
+
+      <div class="btn-container">
+        <div class="btn-col">
+          <a class="btn btn-primary" href="customer.html"
+            >Customer Signup/Login</a
+          >
+        </div>
+        <div class="btn-col">
+          <a class="btn btn-secondary" href="restaurant.html"
+            >Restaurant Signup/Login</a
+          >
+        </div>
+        <div class="btn-col">
+          <a class="btn btn-success" href="delivery.html"
+            >Delivery Partner Signup/Login</a
+          >
+        </div>
+      </div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+      let customerId = localStorage.getItem("customerId");
+      if (customerId != null) {
+        window.location.href = "customerDashboard.html";
+      }
+    </script>
   </body>
-  <script>
-    let customerEl = document.getElementById("customerId");
-    let restaurantEl = document.getElementById("customerId");
-    let menuItemEl = document.getElementById("menuItemId");
-    let orderEl = document.getElementById("orderplace");
-
-    orderEl.addEventListener("click", () => {
-      let customerId = customerEl.value;
-      let restaurantId = restaurantEl.value;
-      let menuItemId = menuItemEl.value;
-      let menuItemIds = [];
-      menuItemIds.push(menuItemId);
-
-      let data = {};
-
-      fetch(
-        `http://localhost:8080/orders/${customerId}/${restaurantId}?menuItemIds=${menuItemIds.join(
-          ","
-        )}`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
-        }
-      )
-        .then((response) => response.json())
-        .then((result) => {
-          const order = result; // Access the order object from the response
-          // Use the order object as needed
-          alert("Order Places Successful Order Id:" + order.orderId);
-          console.log(order);
-          // ...
-        })
-        .catch((error) => console.log("error", error));
-    });
-  </script>
 </html>

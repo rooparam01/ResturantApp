@@ -41,8 +41,11 @@ public class AppConfig {
 
 
         http.authorizeHttpRequests(auth -> {
-                    auth.requestMatchers(HttpMethod.POST, "/customers").permitAll()
-                            .requestMatchers(HttpMethod.GET, "/hello").hasAnyAuthority("VIEWALLCUSTOMER","VIEWCUSTOMER")
+                    auth.requestMatchers(HttpMethod.POST, "/customers","/restaurants","deliverypartners").permitAll()
+                            .requestMatchers("/swagger-ui*/**","/v3/api-docs/**").permitAll()
+                            .requestMatchers(HttpMethod.GET, "/customers/**").hasRole("CUSTOMER")
+                            .requestMatchers( "/deliverypartners/**").hasRole("DELIVERYPARTNER")
+                            .requestMatchers( "/restaurants/**").hasRole("RESTAURANT")
                             .anyRequest().authenticated();
                 })
                 .csrf(csrf -> csrf.disable())

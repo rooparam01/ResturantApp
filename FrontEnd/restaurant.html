@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Login/Sign Up Restaurant</title>
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f2f2f2;
+        margin: 0;
+        padding: 0;
+      }
+
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 40px;
+        text-align: center;
+      }
+
+      h1 {
+        color: #333333;
+        font-size: 32px;
+        margin-top: 0;
+        margin-bottom: 40px;
+      }
+
+      .form-container {
+        display: flex;
+        justify-content: center;
+      }
+
+      .form-col {
+        flex: 0 0 400px;
+        margin-right: 20px;
+      }
+
+      @media (max-width: 576px) {
+        .form-col {
+          margin-right: 0;
+          margin-bottom: 20px;
+        }
+      }
+
+      .form-group {
+        margin-bottom: 20px;
+      }
+
+      .form-group label {
+        display: block;
+        font-weight: bold;
+        margin-bottom: 5px;
+      }
+
+      .form-group input {
+        width: 100%;
+        padding: 10px;
+        font-size: 16px;
+        border-radius: 4px;
+        border: 1px solid #cccccc;
+      }
+
+      .btn-primary {
+        background-color: #007bff;
+        color: #ffffff;
+      }
+
+      .btn-primary:hover {
+        background-color: #0056b3;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Login/Sign Up Restaurant</h1>
+
+      <div class="form-container">
+        <div class="form-col">
+          <!-- Login form -->
+          <form id="login-form">
+            <h2>Login</h2>
+            <div class="form-group">
+              <label for="login-email">Email</label>
+              <input type="email" id="login-email" name="email" required />
+            </div>
+            <div class="form-group">
+              <label for="login-password">Password</label>
+              <input
+                type="password"
+                id="login-password"
+                name="password"
+                required
+              />
+            </div>
+            <button type="submit" class="btn btn-primary">Login</button>
+          </form>
+        </div>
+
+        <div class="form-col">
+          <!-- Sign up form -->
+          <form id="signup-form">
+            <h2>Sign Up</h2>
+            <div class="form-group">
+              <label for="signup-name">Name</label>
+              <input type="text" id="signup-name" name="name" required />
+            </div>
+            <div class="form-group">
+              <label for="signup-email">Email</label>
+              <input type="email" id="signup-email" name="email" required />
+            </div>
+            <div class="form-group">
+              <label for="signup-password">Password</label>
+              <input
+                type="password"
+                id="signup-password"
+                name="password"
+                required
+              />
+            </div>
+            <button type="submit" class="btn btn-primary">Sign Up</button>
+          </form>
+        </div>
+      </div>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+      $(document).ready(function () {
+        // Login form submission
+        $("#login-form").submit(function (event) {
+          event.preventDefault();
+
+          var email = $("#login-email").val();
+          var password = $("#login-password").val();
+
+          // Create Basic Authentication header
+
+          // Make GET request to fetch JWT token
+          var authHeader = "Basic " + btoa("REST_" + email + ":" + password);
+
+          var myHeaders = new Headers();
+          myHeaders.append("Content-Type", "application/json");
+          myHeaders.append("Authorization", authHeader);
+
+          var requestOptions = {
+            method: "GET",
+            headers: myHeaders,
+            redirect: "follow",
+          };
+
+          fetch("http://localhost:8080/restaurants/signIn", requestOptions)
+            .then((response) => {
+              if (response.ok) {
+                var token = response.headers.get("Authorization");
+                localStorage.setItem("restauranttoken", token);
+                console.log("Token stored:", token);
+              } else {
+                console.log("Error:", response.status);
+              }
+              return response.json();
+            })
+            .then((result) => {
+              var restaurantId = result.restaurantId;
+              var restaurantname = result.name;
+              localStorage.setItem("restaurantid", restaurantId);
+              console.log(result);
+              localStorage.setItem("restaurantname", restaurantname);
+              console.log(" stored:", restaurantId + " " + restaurantname);
+              window.location.href = "restaurantDashboard.html";
+            })
+            .catch((error) => console.log("error", error));
+        });
+
+        // Signup form submission
+        $("#signup-form").submit(function (event) {
+          event.preventDefault();
+
+          var name = $("#signup-name").val();
+          var email = $("#signup-email").val();
+          var password = $("#signup-password").val();
+
+          var signupData = {
+            name: name,
+            email: email,
+            password: password,
+          };
+
+          var requestOptions = {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(signupData),
+            redirect: "follow",
+          };
+
+          fetch("http://localhost:8080/restaurants", requestOptions)
+            .then((response) => {
+              if (response.ok) {
+                console.log("Restaurant signed up successfully.");
+                // Redirect to login page or desired page
+                window.location.href = "restaurant.html";
+              } else {
+                console.log("Error:", response.status);
+              }
+            })
+            .catch((error) => console.log("Error:", error));
+        });
+      });
+    </script>
+  </body>
+</html>

@@ -1,6 +1,8 @@
 package com.masai.swiggy.Entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -24,7 +26,15 @@ public class DeliveryPartner {
 @Size(message = "Invalid Mobile number",min = 10,max = 13)
     private String phone;
 
+@Email(message = "Email is not valid")
+private String email;
+
+@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+private String password;
+
 @OneToMany(mappedBy = "deliveryPartner")
 private List<Order> orderList = new ArrayList<>();
+
+    private String role;
 
 }

@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Customer Page</title>
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f2f2f2;
+        margin: 0;
+        padding: 0;
+      }
+
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 40px;
+        text-align: center;
+      }
+
+      h1 {
+        color: #333333;
+        font-size: 32px;
+        margin-top: 0;
+        margin-bottom: 40px;
+      }
+
+      .form-container {
+        display: flex;
+        justify-content: center;
+      }
+
+      .form-col {
+        flex: 0 0 400px;
+        margin-right: 20px;
+      }
+
+      @media (max-width: 576px) {
+        .form-col {
+          margin-right: 0;
+          margin-bottom: 20px;
+        }
+      }
+
+      .form-group {
+        margin-bottom: 20px;
+      }
+
+      .form-group label {
+        display: block;
+        font-weight: bold;
+        margin-bottom: 5px;
+      }
+
+      .form-group input {
+        width: 100%;
+        padding: 10px;
+        font-size: 16px;
+        border-radius: 4px;
+        border: 1px solid #cccccc;
+      }
+
+      .btn-primary {
+        background-color: #007bff;
+        color: #ffffff;
+      }
+
+      .btn-primary:hover {
+        background-color: #0056b3;
+      }
+
+      .btn-secondary {
+        background-color: #6c757d;
+        color: #ffffff;
+      }
+
+      .btn-secondary:hover {
+        background-color: #4e555a;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Customer Page</h1>
+
+      <div class="form-container">
+        <div class="form-col">
+          <form id="login-form">
+            <h2>Login</h2>
+            <div class="form-group">
+              <label for="login-email">Email</label>
+              <input type="email" id="login-email" name="email" required />
+            </div>
+            <div class="form-group">
+              <label for="login-password">Password</label>
+              <input
+                type="password"
+                id="login-password"
+                name="password"
+                required
+              />
+            </div>
+            <button type="submit" class="btn btn-primary">Login</button>
+          </form>
+        </div>
+
+        <div class="form-col">
+          <form id="signup-form">
+            <h2>Sign Up</h2>
+            <div class="form-group">
+              <label for="signup-name">Name</label>
+              <input type="text" id="signup-name" name="name" required />
+            </div>
+            <div class="form-group">
+              <label for="signup-email">Email</label>
+              <input type="email" id="signup-email" name="email" required />
+            </div>
+            <div class="form-group">
+              <label for="signup-password">Password</label>
+              <input
+                type="password"
+                id="signup-password"
+                name="password"
+                required
+              />
+            </div>
+          </form>
+          <button type="button" class="btn btn-secondary" id="signup-button">
+            Sign Up
+          </button>
+        </div>
+      </div>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+      let customerId = localStorage.getItem("customerId");
+      if (customerId != null) {
+        window.location.href = "customerDashboard.html";
+      }
+      $(document).ready(function () {
+        // Login form submission
+        $("#login-form").submit(function (event) {
+          event.preventDefault();
+
+          var email = $("#login-email").val();
+          var password = $("#login-password").val();
+
+          // Create Basic Authentication header
+
+          // Make GET request to fetch JWT token
+          var authHeader = "Basic " + btoa("CUST_" + email + ":" + password);
+
+          var myHeaders = new Headers();
+          myHeaders.append("Content-Type", "application/json");
+          myHeaders.append("Authorization", authHeader);
+
+          var requestOptions = {
+            method: "GET",
+            headers: myHeaders,
+            redirect: "follow",
+          };
+
+          fetch("http://localhost:8080/customers/signIn", requestOptions)
+            .then((response) => {
+              if (response.ok) {
+                var token = response.headers.get("Authorization");
+                localStorage.setItem("custtoken", token);
+                console.log("Token stored:", token);
+              } else {
+                console.log("Error:", response.status);
+              }
+              return response.json();
+            })
+            .then((result) => {
+              var customerId = result.customerId;
+              var customername = result.name;
+              localStorage.setItem("customername", customername);
+              console.log(result);
+              localStorage.setItem("customerId", customerId);
+              console.log("customerId stored:", customerId);
+              window.location.href = "customerDashboard.html";
+            })
+            .catch((error) => console.log("error", error));
+        });
+
+        // Handle Sign Up button click event
+
+        // Signup form submission
+        $("#signup-button").click(function (event) {
+          event.preventDefault();
+
+          var name = $("#signup-name").val();
+          var email = $("#signup-email").val();
+          var password = $("#signup-password").val();
+          var city = $("#signup-city").val();
+          var state = $("#signup-state").val();
+          var pincode = $("#signup-pincode").val();
+
+          var address = {
+            city: city,
+            state: state,
+            pincode: pincode,
+          };
+
+          var signupData = {
+            name: name,
+            email: email,
+            password: password,
+            address: address,
+          };
+          console.log(signupData);
+
+          var requestOptions = {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(signupData),
+          };
+
+          // Make POST request to create a new customer
+          fetch("http://localhost:8080/customers", requestOptions)
+            .then((response) => response.json())
+            .then((data) => {
+              // Redirect to login page or desired page
+              console.log("New customer created:", data);
+              alert("New customer created");
+              window.location.href = "customer.html";
+            })
+            .catch((error) => alert("Email already registered with us"));
+        });
+      });
+    </script>
+  </body>
+</html>

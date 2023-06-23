@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Customer Dashboard</title>
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f2f2f2;
+        margin: 0;
+        padding: 0;
+      }
+
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 40px;
+        text-align: center;
+      }
+
+      h1 {
+        color: #333333;
+        font-size: 32px;
+        margin-top: 0;
+        margin-bottom: 40px;
+      }
+
+      .dashboard-content {
+        margin-bottom: 20px;
+      }
+
+      .logout-btn {
+        background-color: #dc3545;
+        color: #ffffff;
+      }
+
+      .logout-btn:hover {
+        background-color: #c82333;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Customer Dashboard</h1>
+
+      <div class="dashboard-content">
+        <!-- Add your dashboard content here -->
+        <p id="welcome-message"></p>
+      </div>
+
+      <button type="button" class="btn logout-btn" id="logout-button">
+        Logout
+      </button>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+      $(document).ready(function () {
+        // Retrieve customerName from local storage
+        var customerName = localStorage.getItem("customername");
+
+        if (customerName) {
+          // Display welcome message with customerName
+          $("#welcome-message").text("Welcome, " + customerName + "!");
+        }
+
+        // Logout button click event
+        $("#logout-button").click(function () {
+          // Clear token, customerId, and customerName from local storage
+          localStorage.removeItem("token");
+          localStorage.removeItem("customerId");
+          localStorage.removeItem("customername");
+          // Redirect to customer.html
+          window.location.href = "customer.html";
+        });
+      });
+    </script>
+  </body>
+</html>

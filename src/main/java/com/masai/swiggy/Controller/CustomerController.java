@@ -11,6 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping("/customers")
 public class CustomerController {
 
     @Autowired
@@ -18,7 +19,7 @@ public class CustomerController {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
-    @PostMapping("/customers")
+    @PostMapping
     public ResponseEntity<Customer> addnewCustomer(@Valid @RequestBody Customer customer){
         customer.setPassword(passwordEncoder.encode(customer.getPassword()));
       Customer savedCustomer =  customerService.addNewCustomer(customer);
@@ -26,18 +27,18 @@ public class CustomerController {
     }
 
     @GetMapping("/signIn")
-    public ResponseEntity<String> getLoggedInCustomerDetailsHandler(Authentication auth){
+    public ResponseEntity<Customer> getLoggedInCustomerDetailsHandler(Authentication auth){
 
         System.out.println(auth); // this Authentication object having Principle object details
 
         Customer customer= customerService.getUserDetailsByEmail(auth.getName());
 
-        return new ResponseEntity<>(customer.getName()+"Logged In Successfully", HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(customer, HttpStatus.ACCEPTED);
     }
 
 
 
-    @GetMapping("/customers/{email}")
+    @GetMapping("/{email}")
     public ResponseEntity<Customer> getDetailsByEmail(@PathVariable String email){
         Customer customer = customerService.getUserDetailsByEmail(email);
         return new ResponseEntity<>(customer,HttpStatus.OK);

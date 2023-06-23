@@ -33,6 +33,5 @@ public class Customer {
 @OneToMany(mappedBy = "customer")
     private List<Order> orderList = new ArrayList<>();
 
-@OneToMany(mappedBy = "customer",fetch = FetchType.EAGER,cascade = CascadeType.ALL)
-    private List<Authority> authorities = new ArrayList<>();
+private String role;
 }

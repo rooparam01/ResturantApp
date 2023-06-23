@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Restaurant Dashboard</title>
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f2f2f2;
+        margin: 0;
+        padding: 0;
+      }
+
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 40px;
+        text-align: center;
+      }
+
+      h1 {
+        color: #333333;
+        font-size: 32px;
+        margin-top: 0;
+        margin-bottom: 40px;
+      }
+
+      .welcome-message {
+        font-size: 24px;
+        margin-bottom: 20px;
+      }
+
+      .logout-button {
+        background-color: #6c757d;
+        color: #ffffff;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+
+      .logout-button:hover {
+        background-color: #4e555a;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Restaurant Dashboard</h1>
+
+      <div class="welcome-message">
+        <p>Welcome, <span id="restaurant-name"></span>!</p>
+      </div>
+
+      <button id="logout-button" class="logout-button">Logout</button>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+      $(document).ready(function () {
+        var restaurantName = localStorage.getItem("restaurantname");
+
+        if (restaurantName) {
+          $("#restaurant-name").text(restaurantName);
+        }
+
+        $("#logout-button").click(function () {
+          // Clear localStorage values
+          localStorage.removeItem("restauranttoken");
+          localStorage.removeItem("restaurantid");
+          localStorage.removeItem("restaurantname");
+
+          // Redirect to login page
+          window.location.href = "restaurant.html";
+        });
+      });
+    </script>
+  </body>
+</html>
